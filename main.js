@@ -1,21 +1,40 @@
 const discord = require("discord.js")
 const fs = require("fs")
 const client = new discord.Client()
-var guild;var scoreChannel;var members
+var guild;var scoreChannel;var members;var scoreMessage
 var fileSave = __dirname + "/save.json";
 var saveDir = __dirname + "/saves/"
-const roles = [{seuil:15,id:"711003955341295636"},{seuil:5,id:"711003936672186400"},{seuil:0,id:"711003903642042401"}]
+const roles = [
+    {seuil:100000,id:"710969412093476925"},
+    {seuil:50000,id:"710973545773138030"},
+    {seuil:25000,id:"710972777170993164"},
+    {seuil:10000,id:"710974492566093867"},
+    {seuil:5000,id:"710974719448449118"},
+    {seuil:1500,id:"710975161314181174"},
+    {seuil:500,id:"710975465678045226"}
+]
 client.on("ready",()=>{
     console.log("bot started...")
     guild = client.guilds.cache.find(e=>e.id=="544953131205918720");
     scoreChannel = guild.channels.cache.array().find(e=>e.name=="points")
+    scoreChannel.messages.fetch({limit:100}).then(messages=>{
+        messages.array().forEach(async (message)=>{
+            await message.delete()
+        })
+    })
     members = loadMemb()
     checkMemb()
     setInterval(()=>save(),30*1000);
     setInterval(()=>savefile(),1000*60*60)//toutes les heures
     setInterval(()=>up(),1000) 
     setInterval(()=>upRoles(),1000);
-    sendUpdateMessage();
+    setInterval(()=>{
+        if(scoreMessage)
+            scoreMessage.edit(makeEmbed())
+        else{
+            scoreChannel.send(makeEmbed()).then(msg=>scoreMessage = msg)
+        }
+    },3000)
 })
 client.on("guildMemberAdd",()=>{
     checkMemb()
@@ -54,7 +73,7 @@ function savefile(){
 function up(){
     members.forEach(memb=>{
         if(inVocal(memb))
-            memb.score += 1//60;
+            memb.score += 1/60;
     })
     console.log(members.map(e=>e.score))
 }
@@ -77,7 +96,7 @@ function upRoles(memb){
 })
 }
 
-function sendUpdateMessage(){
+function makeEmbed(){
     members.sort((a,b)=>b.score-a.score);
     var noms = []
     for(var i=0;i<15;i++){
@@ -96,7 +115,8 @@ function sendUpdateMessage(){
         "https://cdn.discordapp.com/attachments/706503185266769993/710985435609825360/diable-samurai-mascotte-e-sport_96628-73.png"
       )
       msg.setColor(0)
-      msg.setDescription("scores des 15 premiers :")
+      msg.setTitle("scores des 15 premiers :")
+      .setTimestamp()
     //   msg.addField('\u200b', '\u200b')
     msg.addField("**Top #1:**  "+ noms[0] + ":", "__**" + Math.round(members[0].score) + "**__", true)
     // msg.addField('\u200b', '\u200b')
@@ -106,7 +126,7 @@ function sendUpdateMessage(){
     for(let i=3;i<15;i++){
         try{msg.addField("**#"+(i+1)+"**  " + noms[i] + ":","**" + Math.round(members[i].score) + "**",true)}catch{}
     }
-    scoreChannel.send(msg)
+    return msg
 }
 
 function inVocal(memb){
