@@ -142,4 +142,4 @@ function inVocal(memb){
     if(guildmember.voice.selfMute || guildmember.voice.selfDeaf)return false//si sourd ou muet
     return true
 }
-client.login("NzEwOTg0ODA1MDYzNDU4ODM3.Xr87Gw.DLFzukxD9yxV0LLgg4WOSc-lo1s")
+client.login("")
