@@ -15,6 +15,7 @@ client.on("ready",()=>{
     setInterval(()=>savefile(),1000*60*60)//toutes les heures
     setInterval(()=>up(),1000) 
     setInterval(()=>uproles(),1000);
+    sendUpdateMessage();
 })
 client.on("guildMemberAdd",()=>{
     checkMemb()
@@ -52,13 +53,8 @@ function savefile(){
 }
 function up(){
     members.forEach(memb=>{
-        var guildmember = guild.members.cache.find(e=>e.id==memb.id)
-        if(!guildmember.voice)return
-        if(guildmember.voice.channel == null) return //pas dans un channel
-        if(!guildmember.voice.type == "voice") return //si pas dans vocal
-        if(guildmember.voice.channel.members.array().filter(e=>!e.user.bot).length == 1) return //si tout seul dans channel ou tt seul avec bot(s)
-        if(guildmember.voice.selfMute || guildmember.voice.selfDeaf)return //si sourd ou muet
-        memb.score += 1/60;
+        if(inVocal(memb))
+            memb.score += 1/60;
     })
     console.log(members.map(e=>e.score))
 }
@@ -82,8 +78,26 @@ function uproles(){
         }
     })
 }
+
+function sendUpdateMessage(){
+    members.sort((a,b)=>b.score-a.score);
+    var noms = []
+    for(var i=0;i<15;i++){
+        // var nom = 
+    }
+
+    var msg = new discord.MessageEmbed()
+    msg.addField("osef","text");
+    scoreChannel.send(msg)
+}
+
+function inVocal(memb){
+    var guildmember = guild.members.cache.find(e=>e.id==memb.id)
+    if(!guildmember.voice)return false
+    if(guildmember.voice.channel == null) return false//pas dans un channel
+    if(!guildmember.voice.type == "voice") return false//si pas dans vocal
+    if(guildmember.voice.channel.members.array().filter(e=>!e.user.bot).length == 1) return false //si tout seul dans channel ou tt seul avec bot(s)
+    if(guildmember.voice.selfMute || guildmember.voice.selfDeaf)return false//si sourd ou muet
+    return true
+}
 client.login("NzEwOTg0ODA1MDYzNDU4ODM3.Xr87Gw.DLFzukxD9yxV0LLgg4WOSc-lo1s")
-// client.on("ready",()=>{
-//     client;
-// })
-// client.login("NzExMDE3MzMzMjAzOTI3MTEx.Xr84gw.x34SSD-03KDsxZfqQbY6AbzSXUQ")
