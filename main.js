@@ -1,6 +1,6 @@
 const discord = require("discord.js")
 const fs = require("fs")
-const client = new discord.Client()
+var client = new discord.Client({ws:{intents:discord.Intents.ALL}});
 var guild;var scoreChannel;var members;var scoreMessage
 var fileSave = __dirname + "/save.json";
 var saveDir = __dirname + "/saves/"
