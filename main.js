@@ -15,8 +15,8 @@ const roles = [
 ]
 client.on("ready",()=>{
     console.log("bot started...")
-    guild = client.guilds.cache.find(e=>e.id=="544953131205918720");
-    scoreChannel = guild.channels.cache.array().find(e=>e.name=="points")
+    guild = client.guilds.cache.find(e=>e.id=="706503185266769990");
+    scoreChannel = guild.channels.cache.array().find(e=>e.id=="711250866581274624")
     scoreChannel.messages.fetch({limit:100}).then(messages=>{
         messages.array().forEach(async (message)=>{
             await message.delete()
@@ -142,4 +142,4 @@ function inVocal(memb){
     if(guildmember.voice.selfMute || guildmember.voice.selfDeaf)return false//si sourd ou muet
     return true
 }
-client.login("")
+client.login("token")
