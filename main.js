@@ -135,6 +135,7 @@ function inVocal(memb){
     }catch{
         var guildmember = memb;
     }
+    if(!guildmember) return false;
     if(!guildmember.voice)return false
     if(guildmember.voice.channel == null) return false//pas dans un channel
     if(!guildmember.voice.type == "voice") return false//si pas dans vocal
