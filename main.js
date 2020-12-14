@@ -80,7 +80,7 @@ function up(){
 function upRoles(memb){
     members.forEach(memb=>{
         var guildmember = guild.members.cache.find(e=>e.id==memb.id)
-
+        if(guildmember==undefined)return
         for (var i = 0; i < roles.length; i++) {//on parcours les roles
           const role = roles[i];
           if (memb.score >= role.seuil) {//role max
