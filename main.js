@@ -18,9 +18,16 @@ client.on("ready",()=>{
     guild = client.guilds.cache.find(e=>e.id=="706503185266769990");
     scoreChannel = guild.channels.cache.array().find(e=>e.id=="711250866581274624")
     scoreChannel.messages.fetch({limit:100}).then(messages=>{
-        messages.array().forEach(async (message)=>{
+        await messages.array().forEach(async (message)=>{
             await message.delete()
         })
+        setInterval(()=>{
+            if(scoreMessage)
+                scoreMessage.edit(makeEmbed())
+            else{
+                scoreChannel.send(makeEmbed()).then(msg=>scoreMessage = msg)
+            }
+        },3000) 
     })
     members = loadMemb()
     checkMemb()
@@ -28,13 +35,6 @@ client.on("ready",()=>{
     setInterval(()=>savefile(),1000*60*60)//toutes les heures
     setInterval(()=>up(),1000) 
     setInterval(()=>upRoles(),1000);
-    setInterval(()=>{
-        if(scoreMessage)
-            scoreMessage.edit(makeEmbed())
-        else{
-            scoreChannel.send(makeEmbed()).then(msg=>scoreMessage = msg)
-        }
-    },3000)
 })
 client.on("guildMemberAdd",()=>{
     checkMemb()
