@@ -17,10 +17,9 @@ client.on("ready",()=>{
     console.log("bot started...")
     guild = client.guilds.cache.find(e=>e.id=="706503185266769990");
     scoreChannel = guild.channels.cache.array().find(e=>e.id=="711250866581274624")
-    scoreChannel.messages.fetch({limit:100}).then(messages=>{
-        await messages.array().forEach(async (message)=>{
-            await message.delete()
-        })
+    scoreChannel.messages.fetch({limit:100}).then(async (messages)=>{
+        for(var i=0; i<messages.array().length; i++)
+            await messages.array()[i].delete()
         setInterval(()=>{
             if(scoreMessage)
                 scoreMessage.edit(makeEmbed())
