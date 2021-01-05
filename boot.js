@@ -29,7 +29,7 @@ svc.install();
 // // Create a new service object
 // var svc = new Service({
 //   name:'Hello World',
-//   script: 'C:\\Users\\Eli\\Documents\\PROGRAMMATION\\JAVASCRIPT\\botdiscord\\saveServer\\server.js'//require('path').join(__dirname,'server.js')
+//script: __dirname + "/main.js"
 // });
 
 // // Listen for the "uninstall" event so we know when it's done.
